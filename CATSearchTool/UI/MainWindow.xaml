@@ -1,0 +1,137 @@
+﻿<Window x:Class="CATSearchTool.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CATSearchTool.UI" 
+        xmlns:bll="clr-namespace:CATSearchTool.BLL" Loaded="Window_Loaded"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="Project"  Height="200" Width="500" Background="Transparent" 
+        WindowStyle="None" AllowsTransparency="True"   
+        ResizeMode="NoResize" ShowInTaskbar="True"   >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Windows.Theme;component/Theme.xaml" />
+                <ResourceDictionary Source="WPFStyle.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <bll:StringToBoolConverter x:Key="S2BConverter"></bll:StringToBoolConverter>
+        </ResourceDictionary>
+        
+    </Window.Resources>
+    <Grid Background="Transparent" >
+        <Border Style="{StaticResource DialogPanelStyle}"   >
+            <Grid Background="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="1"></RowDefinition>
+                    <RowDefinition Height="35"></RowDefinition>
+                </Grid.RowDefinitions>
+                <!--标题栏-->
+                <Grid Grid.Row="0" MouseMove="Grid_MouseMove" >
+                    <Border Style="{StaticResource ResourceKey=DialogTitleStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions >
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="3" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition Width="3" />
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="top_logo" Grid.Column="0" Height="20" Width="20" 
+                                   Stretch="Fill" IsEnabled="False" 
+                                   Source="/CATSearchTool;component/Resources/3DEXPERIENCE.ico"/>
+                            <Grid Grid.Column="2" HorizontalAlignment="Left"  VerticalAlignment="Center"  >
+                                <TextBlock x:Name="sss" Foreground="#FF625B5B"  Text="3D Search" 
+                                           Style="{StaticResource  ResourceKey=DialogTitleFontStyle }">
+                                </TextBlock>
+                            </Grid>
+                            <Button x:Name="MinApp" Grid.Column="3" 
+                                    Style="{StaticResource ResourceKey=Min_Button }"
+                                    HorizontalAlignment="Center" Click="MinApp_Click" />
+                            <Button x:Name="CloseApp" Grid.Column="4" 
+                                    Style="{StaticResource ResourceKey=Dlg_Close_Button}"
+                                    HorizontalAlignment="Center" Click="CloseApp_Click" />
+                        </Grid>
+                    </Border>
+                </Grid>
+                <!--分割线-->
+                <Grid Grid.Row="1" Background="#D1D4D4"/>
+                <Grid Grid.Row="3" Background="#D1D4D4"/>
+                <!--功能界面-->
+                <Grid Grid.Row="2" Background="WhiteSmoke">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.3*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" 
+                           FontSize="14" HorizontalAlignment="Left" Opacity="0.6">类型 (BaseType)
+                    </Label>
+                    <ComboBox x:Name="cmb_type" Grid.Row="0" Grid.Column="1" Margin="10,0,10,0" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                              SelectedItem="{Binding Type,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" SelectionChanged="cmb_type_SelectionChanged">
+                    </ComboBox>
+                    <Label Grid.Row="1" Grid.Column="0" Opacity="0.6" VerticalAlignment="Center" 
+                           FontSize="14" HorizontalAlignment="Left">标题 (Title)
+                    </Label>
+                    <TextBox x:Name="txt_name" Grid.Row="1" Grid.Column="1" Margin="10,4,10,4" 
+                             GotFocus="txt_name_GotFocus" LostFocus="textBox1_LostFocus" 
+                             VerticalContentAlignment="Center" KeyDown="txt_Enter_KeyDown" 
+                             IsEnabled="{Binding ElementName=cmb_type,Path=SelectedItem,Converter={StaticResource S2BConverter}}"
+                             Text="{Binding Name,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+                    <Label Grid.Row="2" Grid.Column="0" Opacity="0.6" VerticalAlignment="Center" 
+                           FontSize="14" HorizontalAlignment="Left">版本 (Revision)
+                    </Label>
+                    <TextBox x:Name="txt_revision" Grid.Row="2" Margin="10,4,10,4" Grid.Column="1"  
+                             GotFocus="txt_name_GotFocus" LostFocus="textBox1_LostFocus" 
+                             VerticalContentAlignment="Center" KeyDown="txt_Enter_KeyDown" 
+                             IsEnabled="{Binding ElementName=cmb_type,Path=SelectedItem,Converter={StaticResource S2BConverter}}"
+                             Text="{Binding Revision,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+                    <Label Grid.Row="3" Grid.Column="0" Opacity="0.6" VerticalAlignment="Center" 
+                           FontSize="14" HorizontalAlignment="Left">全称 (Name)
+                    </Label>
+                    <TextBox x:Name="txt_id" Grid.Row="3" Grid.Column="1" Margin="10,4,10,4"  GotFocus="txt_name_GotFocus" LostFocus="textBox1_LostFocus" VerticalContentAlignment="Center" KeyDown="txt_Enter_KeyDown">
+                        <TextBox.Text>
+                            <Binding Path="Id" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" NotifyOnValidationError="True" ValidatesOnExceptions="False">
+                                <Binding.ValidationRules>
+                                    <bll:DataValidation ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="False"></bll:DataValidation>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </Grid>
+                <Grid Grid.Row="4" >
+                    <Border Style="{StaticResource ResourceKey=DialogBottomStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions  >
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="68" />
+                                <ColumnDefinition Width="68" />
+                                <ColumnDefinition Width="68" />
+                                <ColumnDefinition Width="7" />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="2"  >
+                                <Button x:Name="btn_reset" Width="70" Style="{StaticResource ResourceKey=GeneralButton}" 
+                                        FontSize="12" Click="btn_reset_Click" Foreground="#FF625B5B" >Reset
+                                </Button>
+                            </Grid>
+                            <Grid Grid.Column="3"  >
+                                <Button x:Name="btn_search" Width="70" Style="{StaticResource ResourceKey=GeneralButton}"  
+                                        FontSize="12" Foreground="#FF625B5B" Click="btn_search_Click">Search
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
